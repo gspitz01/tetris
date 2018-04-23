@@ -45,7 +45,7 @@ public abstract class Shape {
     public void setBlocks(int[] xs, int[] ys) {
         blocks = new Block[NUM_BLOCKS];
         for (int i = 0; i < NUM_BLOCKS; i++) {
-            blocks[i] = new Block(xs[i], ys[i]);
+            blocks[i] = new Block(xs[i], ys[i], color);
         }
     }
 
