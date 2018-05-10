@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gspitz01/tetris.svg?branch=master)](https://travis-ci.org/gspitz01/tetris)
+[![codecov](https://codecov.io/gh/gspitz01/tetris/branch/master/graph/badge.svg)](https://codecov.io/gh/gspitz01/tetris)
 # Tetris
 
 5 different types of blocks:
