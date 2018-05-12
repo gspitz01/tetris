@@ -6,6 +6,7 @@ import com.gregspitz.tetris.shape.Shape;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class Grid {
@@ -28,7 +29,7 @@ public class Grid {
     }
 
     public boolean addShape(Shape shape) {
-        if (gameOver) {
+        if (gameOver || currentShape != null) {
             return false;
         }
 
@@ -121,9 +122,41 @@ public class Grid {
         }
     }
 
+    public void rotateCurrentShape() {
+        if (!gameOver && currentShape != null) {
+            currentShape.rotate();
+        }
+    }
+
     private void addShapeToBlockGroup() {
         blockGroup.addAll(Arrays.asList(currentShape.getBlocks()));
         currentShape = null;
+        checkForAndRemoveFilledRows();
+    }
+
+    private void checkForAndRemoveFilledRows() {
+        // TODO: optimize this by turning blockGroup into a 2D array
+        int[] blocksInRow = new int[height];
+        for (int i = 0; i < height; i++) {
+            blocksInRow[i] = 0;
+        }
+        for (Block block : blockGroup) {
+            blocksInRow[block.getY()]++;
+        }
+        List<Integer> rowsToRemove = new ArrayList<>();
+        for (int i = 0; i < height; i++) {
+            if (blocksInRow[i] == width) {
+                rowsToRemove.add(i);
+            }
+        }
+        blockGroup.removeIf(currentBlock -> rowsToRemove.contains(currentBlock.getY()));
+        for (Block block : blockGroup) {
+            for (int row : rowsToRemove) {
+                if (block.getY() < row) {
+                    block.setY(block.getY() + 1);
+                }
+            }
+        }
     }
 
     private char getBlockChar(Block block) {

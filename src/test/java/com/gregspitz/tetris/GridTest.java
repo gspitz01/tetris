@@ -12,6 +12,11 @@ import static org.junit.Assert.assertTrue;
 
 public class GridTest {
 
+    // TODO: fix shape rotation so it doesn't leave boundary
+    // TODO: give points for removal of row
+    // TODO: fix bug of moving down and right or left causes overlap in shapes
+    // -- moving over directly before a down motion causes overlapping corners
+
     private Grid grid;
 
     @Before
@@ -31,6 +36,14 @@ public class GridTest {
         Shape square = new Square(0, DEFAULT_HEIGHT);
         assertFalse(grid.addShape(square));
         assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
+    }
+
+    @Test
+    public void addShape_wontAddUntilCurrentShapeHitsBottom() {
+        assertTrue(grid.addShape(new Square(0, 0)));
+        assertFalse(grid.addShape(new Square(4, 0)));
+        moveShapeDownNumberOfTimes(18);
+        assertTrue(grid.addShape(new Square(4, 0)));
     }
 
     @Test
@@ -249,9 +262,100 @@ public class GridTest {
         assertEquals(GridTestData.GRID_WITH_5_STRAIGHTS_STACKED_AT_0_0, grid.toString());
     }
 
+    @Test
+    public void fillBottomRow_removesRowAndMovesOtherRowsDown() {
+        Shape centerStep1 = new CenterStep(0, 0);
+        addShapeAndMoveItAllTheWayDown(centerStep1);
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_0_19, grid.toString());
+        Shape centerStep2 = new CenterStep(3, 0);
+        addShapeAndMoveItAllTheWayDown(centerStep2);
+        assertEquals(GridTestData.GRID_WITH_2_CENTER_STEPS_NEXT_TO_EACH_OTHER_AT_BOTTOM, grid.toString());
+        Shape square1 = new Square(6, 0);
+        addShapeAndMoveItAllTheWayDown(square1);
+        assertEquals(GridTestData.GRID_WITH_2_CENTER_STEPS_AND_SQUARE_NEXT_TO_EACH_OTHER_AT_BOTTOM, grid.toString());
+        Shape square2 = new Square(8, 0);
+        addShapeAndMoveItAllTheWayDown(square2);
+        assertEquals(GridTestData.GRID_WITH_2_CS_2_SQ_HIT_BOTTOM_REMOVED_LAST_LINE, grid.toString());
+    }
+
+    @Test
+    public void fill4BottomRows_removesAllFourRows() {
+        Shape straight1 = new Straight(0, 0);
+        addShapeAndMoveItAllTheWayDown(straight1);
+        assertEquals(GridTestData.GRID_WITH_STRAIGHT_AT_0_16, grid.toString());
+        Shape straight2 = new Straight(1, 0);
+        addShapeAndMoveItAllTheWayDown(straight2);
+        assertEquals(GridTestData.GRID_WITH_2_STRAIGHTS_AT_BOTTOM, grid.toString());
+        for (int i = 2; i < 9; i++) {
+            Shape straight = new Straight(i, 0);
+            addShapeAndMoveItAllTheWayDown(straight);
+        }
+        assertEquals(GridTestData.GRID_WITH_9_STRAIGHTS_AT_BOTTOM, grid.toString());
+        Shape straight10 = new Straight(9, 0);
+        addShapeAndMoveItAllTheWayDown(straight10);
+        assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
+    }
+
+    @Test
+    public void rotateSquare_doesNothing() {
+        Shape square = new Square(0, 0);
+        grid.addShape(square);
+        assertEquals(GridTestData.GRID_WITH_SQUARE_AT_0_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_SQUARE_AT_0_0, grid.toString());
+    }
+
+    @Test
+    public void rotateStraight_rotatesStraight() {
+        Shape straight = new Straight(4, 0);
+        grid.addShape(straight);
+        assertEquals(GridTestData.GRID_WITH_STRAIGHT_AT_4_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_STRAIGHT_ROTATED_AT_4_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_STRAIGHT_AT_4_0, grid.toString());
+    }
+
+    @Test
+    public void rotateRightStep_rotatesRightStep() {
+        Shape rightStep = new RightStep(0, 1);
+        grid.addShape(rightStep);
+        assertEquals(GridTestData.GRID_WITH_RIGHT_STEP_AT_0_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_RIGHT_STEP_ROTATED_AT_0_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_RIGHT_STEP_AT_0_1, grid.toString());
+    }
+
+    @Test
+    public void rotateLeftStep_rotatesLeftStep() {
+        Shape leftStep = new LeftStep(0, 0);
+        grid.addShape(leftStep);
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_AT_0_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_ROTATED_AT_0_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_AT_0_0, grid.toString());
+    }
+
+    @Test
+    public void rotateCenterStep_rotatesCenterStep() {
+        Shape centerStep = new CenterStep(1, 1);
+        grid.addShape(centerStep);
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_1_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_AT_1_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_TWICE_AT_1_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_THRICE_AT_1_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_1_1, grid.toString());
+    }
+
     private void addShapeAndMoveItAllTheWayDown(Shape shape) {
         grid.addShape(shape);
-        moveShapeDownNumberOfTimes(18);
+        moveShapeDownNumberOfTimes(20);
     }
 
     private void addInitialSquareAndMoveItAllTheWayDown() {
