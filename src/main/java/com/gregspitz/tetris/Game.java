@@ -1,6 +1,7 @@
 package com.gregspitz.tetris;
 
-import com.gregspitz.tetris.shape.Square;
+import com.gregspitz.tetris.shape.*;
+import com.gregspitz.tetris.shape.Shape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 import static java.awt.event.KeyEvent.VK_LEFT;
 import static java.awt.event.KeyEvent.VK_RIGHT;
@@ -15,6 +17,7 @@ import static java.awt.event.KeyEvent.VK_UP;
 
 public class Game extends JComponent implements ActionListener, KeyListener {
 
+    private static final int TIMER_INTERVAL = 200;
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 1200;
     private static final int GRID_WIDTH = 800;
@@ -23,18 +26,34 @@ public class Game extends JComponent implements ActionListener, KeyListener {
     private static final int START_X = 20;
     private static final int START_Y = 20;
     private static final int SPACE_BETWEEN_BLOCKS = 1;
-    private static final int FONT_SIZE = 60;
+    private static final int NUM_SHAPES = 5;
+    private static final int SHAPE_START_X = 4;
+    private static final int SHAPE_START_Y = -1;
+    private static final int NEXT_SHAPE_VIEW_X = 50 + START_X + BLOCK_SIZE * 10;
+    private static final int NEXT_SHAPE_VIEW_Y = START_Y + 100;
+    private static final int NEXT_SHAPE_VIEW_WIDTH = 200;
+    private static final int NEXT_SHAPE_VIEW_HEIGHT = 400;
+    private static final int NEXT_SHAPE_SHAPE_X_OFFSET = 50;
+    private static final int NEXT_SHAPE_SHAPE_Y_OFFSET = 50;
+    private static final Font GAME_OVER_FONT = new Font("TimesRoman", Font.BOLD, 60);
+    private static final Font NEXT_SHAPE_FONT = new Font("Helvetica", Font.PLAIN, 40);
+    private static final String GAME_OVER_TEXT = "GAME OVER";
+    private static final String NEXT_SHAPE_TEXT = "Next Shape";
 
     private Grid grid;
     private Timer timer;
+    private Shape nextShape;
+    private Random random;
 
     private Game() {
         grid = new Grid(Grid.DEFAULT_WIDTH, Grid.DEFAULT_HEIGHT);
-        timer = new Timer(100, this);
+        timer = new Timer(TIMER_INTERVAL, this);
         setSize(GRID_WIDTH, GRID_HEIGHT);
         setFocusable(true);
         requestFocus();
         addKeyListener(this);
+        random = new Random();
+        nextShape = getRandomShape();
         timer.start();
     }
 
@@ -86,10 +105,24 @@ public class Game extends JComponent implements ActionListener, KeyListener {
                 drawBlock = false;
             }
         }
+
+        // Draw next block view
+        g2.setColor(Color.WHITE);
+        g2.drawRect(NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y, NEXT_SHAPE_VIEW_WIDTH, NEXT_SHAPE_VIEW_HEIGHT);
+        g2.setFont(NEXT_SHAPE_FONT);
+        g2.drawString(NEXT_SHAPE_TEXT, NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y - 5);
+        g2.setColor(nextShape.getColor());
+        for (Block block : nextShape.getBlocks()) {
+            int blockX = (block.getX() - SHAPE_START_X) * BLOCK_SIZE;
+            int blockY = (block.getY() - SHAPE_START_Y) * BLOCK_SIZE;
+            g2.fillRect(NEXT_SHAPE_VIEW_X + NEXT_SHAPE_SHAPE_X_OFFSET + blockX,
+                    NEXT_SHAPE_VIEW_Y + NEXT_SHAPE_SHAPE_Y_OFFSET + blockY, BLOCK_SIZE, BLOCK_SIZE);
+        }
+
         if (grid.isGameOver()) {
             g2.setColor(Color.BLACK);
-            g2.setFont(new Font("TimesRoman", Font.BOLD, FONT_SIZE));
-            g2.drawString("GAME OVER", BLOCK_SIZE * 2, BLOCK_SIZE * 10);
+            g2.setFont(GAME_OVER_FONT);
+            g2.drawString(GAME_OVER_TEXT, BLOCK_SIZE * 2, BLOCK_SIZE * 10);
         }
     }
 
@@ -103,15 +136,35 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         gameFrame.setPreferredSize(preferredSize);
         gameFrame.getContentPane().setLayout(new BorderLayout());
         gameFrame.add(new Game(), BorderLayout.CENTER);
+        gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         gameFrame.pack();
         gameFrame.setVisible(true);
     }
 
+    private Shape getRandomShape() {
+        // TODO: make adjustments to the starting position for each block
+        switch(random.nextInt(NUM_SHAPES)) {
+            case 0:
+                return new Square(SHAPE_START_X, SHAPE_START_Y);
+            case 1:
+                return new Straight(SHAPE_START_X, SHAPE_START_Y);
+            case 2:
+                return new CenterStep(SHAPE_START_X, SHAPE_START_Y);
+            case 3:
+                return new LeftStep(SHAPE_START_X, SHAPE_START_Y);
+            case 4:
+                return new RightStep(SHAPE_START_X, SHAPE_START_Y);
+            default:
+                return new Square(SHAPE_START_X, SHAPE_START_Y);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO: add creation of random next shape based on return value of addShape()
         // TODO: show animation for removal of row
-        grid.addShape(new Square(4, -1));
+        if (grid.addShape(nextShape)) {
+            nextShape = getRandomShape();
+        }
         grid.moveCurrentShapeDown();
         if (grid.isGameOver()) {
             timer.stop();
@@ -128,7 +181,8 @@ public class Game extends JComponent implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
             case VK_UP:
-                // TODO: fill in rotate
+                grid.rotateCurrentShape();
+                repaint();
                 break;
             case VK_LEFT:
                 grid.moveCurrentShapeLeft();

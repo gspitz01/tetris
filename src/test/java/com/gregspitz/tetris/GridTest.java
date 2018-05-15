@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class GridTest {
 
+    // TODO: make L shapes
     // TODO: fix shape rotation so it doesn't leave boundary
     // TODO: give points for removal of row
     // TODO: fix bug of moving down and right or left causes overlap in shapes
