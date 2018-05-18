@@ -9,16 +9,16 @@ public class GameTimer implements ActionListener {
     private static final int TIMER_INTERVAL = 200;
 
     private GameModel gameModel;
-    private Game gameView;
+    private GameView gameView;
     private Timer timer;
 
-    GameTimer(GameModel gameModel, Game gameView) {
+    GameTimer(GameModel gameModel, GameView gameView) {
         this.gameModel = gameModel;
         this.gameView = gameView;
         timer = new Timer(TIMER_INTERVAL, this);
     }
 
-    GameTimer(GameModel gameModel, Game gameView, Timer timer) {
+    GameTimer(GameModel gameModel, GameView gameView, Timer timer) {
         this.gameModel = gameModel;
         this.gameView = gameView;
         this.timer = timer;

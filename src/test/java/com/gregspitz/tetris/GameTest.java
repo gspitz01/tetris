@@ -1,26 +1,38 @@
 package com.gregspitz.tetris;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
+import static org.mockito.Mockito.verify;
 
 /**
  * Tests for {@link Game}
  */
 public class GameTest {
 
+
+    @Mock
+    private GameModel model;
+
+    @Mock
+    private GameView view;
+
+    @Mock
+    private GameTimer timer;
+
+    private Game game;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        game = new Game(model, view, timer);
+    }
+
     @Test
-    public void getColorFromChar_returnsCorrectColor() {
-        char[] colorChars = { 'R', 'Y', 'G', 'M', 'B', 'C', 'O', '_', '?'};
-        List<Color> colors = Arrays.asList(Color.RED, Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.BLUE,
-                Color.CYAN, Color.ORANGE, Color.GRAY, Color.BLACK);
-        for (int i = 0; i < colorChars.length; i++) {
-            assertEquals(colors.get(i), Game.getColorFromChar(colorChars[i]));
-        }
+    public void start_callsStartOnTimer() {
+        game.start();
+        verify(timer).start();
     }
 }

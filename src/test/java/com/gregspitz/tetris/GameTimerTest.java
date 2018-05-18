@@ -21,7 +21,7 @@ public class GameTimerTest {
     private GameModel gameModel;
 
     @Mock
-    private Game gameView;
+    private GameView gameView;
 
     @Mock
     private Timer timer;
