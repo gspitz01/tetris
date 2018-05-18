@@ -11,9 +11,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
+import static com.gregspitz.tetris.GameModel.SHAPE_START_X;
+import static com.gregspitz.tetris.GameModel.SHAPE_START_Y;
 import static java.awt.event.KeyEvent.*;
 
 public class Game extends JComponent implements ActionListener, KeyListener {
+
+    // TODO: separate some of this into other classes based on comments
 
     private static final int TIMER_INTERVAL = 200;
     private static final int FRAME_WIDTH = 1000;
@@ -24,9 +28,6 @@ public class Game extends JComponent implements ActionListener, KeyListener {
     private static final int START_X = 20;
     private static final int START_Y = 20;
     private static final int SPACE_BETWEEN_BLOCKS = 1;
-    private static final int NUM_SHAPES = 7;
-    private static final int SHAPE_START_X = 4;
-    private static final int SHAPE_START_Y = -1;
     private static final int NEXT_SHAPE_VIEW_X = 50 + START_X + BLOCK_SIZE * 10;
     private static final int NEXT_SHAPE_VIEW_Y = START_Y + 100;
     private static final int NEXT_SHAPE_VIEW_WIDTH = 200;
@@ -38,23 +39,29 @@ public class Game extends JComponent implements ActionListener, KeyListener {
     private static final String GAME_OVER_TEXT = "GAME OVER";
     private static final String NEXT_SHAPE_TEXT = "Next Shape";
 
-    private Grid grid;
     private Timer timer;
-    private Shape nextShape;
-    private Random random;
+    private GameModel gameModel;
+    private boolean gameOver;
 
     private Game() {
-        grid = new Grid(Grid.DEFAULT_WIDTH, Grid.DEFAULT_HEIGHT);
+        gameModel = new GameModel();
+        gameOver = false;
+        // Timing
         timer = new Timer(TIMER_INTERVAL, this);
+
+        // View
         setSize(GRID_WIDTH, GRID_HEIGHT);
         setFocusable(true);
         requestFocus();
+
+        // View and events
         addKeyListener(this);
-        random = new Random();
-        nextShape = getRandomShape();
+
+        // Timing
         timer.start();
     }
 
+    // View
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -65,7 +72,7 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         int y = START_Y;
         boolean drawBlock = false;
         Color color = Color.BLACK;
-        for (char gridChar : grid.toString().toCharArray()) {
+        for (char gridChar : gameModel.toString().toCharArray()) {
             switch (gridChar) {
                 case 'R':
                 case 'Y':
@@ -96,22 +103,23 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         g2.drawRect(NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y, NEXT_SHAPE_VIEW_WIDTH, NEXT_SHAPE_VIEW_HEIGHT);
         g2.setFont(NEXT_SHAPE_FONT);
         g2.drawString(NEXT_SHAPE_TEXT, NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y - 5);
-        g2.setColor(getColorFromChar(nextShape.getColor()));
-        for (Block block : nextShape.getBlocks()) {
+        g2.setColor(getColorFromChar(gameModel.getNextShape().getColor()));
+        for (Block block : gameModel.getNextShape().getBlocks()) {
             int blockX = (block.getX() - SHAPE_START_X) * BLOCK_SIZE;
             int blockY = (block.getY() - SHAPE_START_Y) * BLOCK_SIZE;
             g2.fillRect(NEXT_SHAPE_VIEW_X + NEXT_SHAPE_SHAPE_X_OFFSET + blockX,
                     NEXT_SHAPE_VIEW_Y + NEXT_SHAPE_SHAPE_Y_OFFSET + blockY, BLOCK_SIZE, BLOCK_SIZE);
         }
 
-        if (grid.isGameOver()) {
+        if (gameOver) {
             g2.setColor(Color.BLACK);
             g2.setFont(GAME_OVER_FONT);
             g2.drawString(GAME_OVER_TEXT, BLOCK_SIZE * 2, BLOCK_SIZE * 10);
         }
     }
 
-    private static Color getColorFromChar(char colorChar) {
+    // View or util
+    static Color getColorFromChar(char colorChar) {
         switch (colorChar) {
             case 'R':
                 return Color.RED;
@@ -138,6 +146,7 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         SwingUtilities.invokeLater(Game::createGuiAndRun);
     }
 
+    // View
     private static void createGuiAndRun() {
         JFrame gameFrame = new JFrame("Tetris");
         Dimension preferredSize = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
@@ -149,64 +158,53 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         gameFrame.setVisible(true);
     }
 
-    private Shape getRandomShape() {
-        // TODO: make adjustments to the starting position for each block
-        switch(random.nextInt(NUM_SHAPES)) {
-            case 0:
-                return new Square(SHAPE_START_X, SHAPE_START_Y);
-            case 1:
-                return new Straight(SHAPE_START_X, SHAPE_START_Y);
-            case 2:
-                return new CenterStep(SHAPE_START_X, SHAPE_START_Y);
-            case 3:
-                return new LeftStep(SHAPE_START_X, SHAPE_START_Y);
-            case 4:
-                return new RightStep(SHAPE_START_X, SHAPE_START_Y);
-            case 5:
-                return new LeftL(SHAPE_START_X, SHAPE_START_Y);
-            case 6:
-                return new RightL(SHAPE_START_X, SHAPE_START_Y);
-            default:
-                return new Square(SHAPE_START_X, SHAPE_START_Y);
-        }
-    }
-
+    // Timing
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO: show animation for removal of row
-        if (grid.addShape(nextShape)) {
-            nextShape = getRandomShape();
-        }
-        grid.moveCurrentShapeDown();
-        if (grid.isGameOver()) {
+        // Returns true if game is over
+        if (gameModel.update()) {
+            // Timing
             timer.stop();
+            gameOver = true;
         }
+
+        // View
         repaint();
     }
 
+    // Events
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
 
+    // Events
     @Override
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
             case VK_UP:
-                grid.rotateCurrentShape();
+                // Model
+                gameModel.rotateShape();
+                // View
                 repaint();
                 break;
             case VK_LEFT:
-                grid.moveCurrentShapeLeft();
+                // Model
+                gameModel.moveShapeLeft();
+                // View
                 repaint();
                 break;
             case VK_RIGHT:
-                grid.moveCurrentShapeRight();
+                // Model
+                gameModel.moveShapeRight();
+                // View
                 repaint();
                 break;
         }
     }
 
+    // Events
     @Override
     public void keyReleased(KeyEvent e) {
 

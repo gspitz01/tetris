@@ -7,6 +7,8 @@ import static junit.framework.TestCase.assertEquals;
 
 public class StraightTest {
 
+    // TODO: add equals tests
+
     private static final int START_X = 0;
     private static final int START_Y = 0;
 

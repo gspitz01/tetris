@@ -10,6 +10,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class RightLTest {
 
+    // TODO: add equals tests
+
     private static final int START_X = 0;
     private static final int START_Y = 0;
 
