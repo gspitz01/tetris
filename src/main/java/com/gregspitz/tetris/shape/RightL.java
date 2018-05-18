@@ -7,7 +7,7 @@ public class RightL extends Shape {
     private int direction;
 
     /**
-     * Right L's are always light gray
+     * Right L's are always cyan
      * Initial block positions:
      * |1|   |1|2|3| |1|2|      |3|
      * |2|   |4|       |3|  |1|2|4|
@@ -16,7 +16,7 @@ public class RightL extends Shape {
      * @param startY starting y position for 1 block
      */
     public RightL(int startX, int startY) {
-        super(Color.LIGHT_GRAY);
+        super(Color.CYAN);
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

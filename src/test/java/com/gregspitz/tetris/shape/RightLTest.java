@@ -24,7 +24,7 @@ public class RightLTest {
 
     @Test
     public void constructor_setsColorLightGray() {
-        assertEquals(Color.LIGHT_GRAY, rightL.getColor());
+        assertEquals(Color.CYAN, rightL.getColor());
     }
 
     @Test

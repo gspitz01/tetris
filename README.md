@@ -6,10 +6,10 @@
 - square - red
 - straight - blue
 - right step - green
-- left step - purple
+- left step - magenta
 - center step - yellow
 - left L - orange
-- right L - light gray
+- right L - cyan
 
 blocks fall from top of grid
 blocks stack on each other
