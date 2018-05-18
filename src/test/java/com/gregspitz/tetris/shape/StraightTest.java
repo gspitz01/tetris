@@ -3,8 +3,6 @@ package com.gregspitz.tetris.shape;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static junit.framework.TestCase.assertEquals;
 
 public class StraightTest {
@@ -21,7 +19,7 @@ public class StraightTest {
 
     @Test
     public void constructor_setsColorToBlue() {
-        assertEquals(Color.BLUE, straight.getColor());
+        assertEquals('B', straight.getColor());
     }
 
     @Test

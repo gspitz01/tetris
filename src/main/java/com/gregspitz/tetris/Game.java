@@ -68,35 +68,14 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         for (char gridChar : grid.toString().toCharArray()) {
             switch (gridChar) {
                 case 'R':
-                    color = Color.RED;
-                    drawBlock = true;
-                    break;
                 case 'Y':
-                    color = Color.YELLOW;
-                    drawBlock = true;
-                    break;
                 case 'G':
-                    color = Color.GREEN;
-                    drawBlock = true;
-                    break;
                 case 'M':
-                    color = Color.MAGENTA;
-                    drawBlock = true;
-                    break;
                 case 'B':
-                    color = Color.BLUE;
-                    drawBlock = true;
-                    break;
                 case 'C':
-                    color = Color.CYAN;
-                    drawBlock = true;
-                    break;
                 case 'O':
-                    color = Color.ORANGE;
-                    drawBlock = true;
-                    break;
                 case '_':
-                    color = Color.GRAY;
+                    color = getColorFromChar(gridChar);
                     drawBlock = true;
                     break;
                 case '\n':
@@ -117,7 +96,7 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         g2.drawRect(NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y, NEXT_SHAPE_VIEW_WIDTH, NEXT_SHAPE_VIEW_HEIGHT);
         g2.setFont(NEXT_SHAPE_FONT);
         g2.drawString(NEXT_SHAPE_TEXT, NEXT_SHAPE_VIEW_X, NEXT_SHAPE_VIEW_Y - 5);
-        g2.setColor(nextShape.getColor());
+        g2.setColor(getColorFromChar(nextShape.getColor()));
         for (Block block : nextShape.getBlocks()) {
             int blockX = (block.getX() - SHAPE_START_X) * BLOCK_SIZE;
             int blockY = (block.getY() - SHAPE_START_Y) * BLOCK_SIZE;
@@ -129,6 +108,29 @@ public class Game extends JComponent implements ActionListener, KeyListener {
             g2.setColor(Color.BLACK);
             g2.setFont(GAME_OVER_FONT);
             g2.drawString(GAME_OVER_TEXT, BLOCK_SIZE * 2, BLOCK_SIZE * 10);
+        }
+    }
+
+    private static Color getColorFromChar(char colorChar) {
+        switch (colorChar) {
+            case 'R':
+                return Color.RED;
+            case 'Y':
+                return Color.YELLOW;
+            case 'G':
+                return Color.GREEN;
+            case 'M':
+                return Color.MAGENTA;
+            case 'B':
+                return Color.BLUE;
+            case 'C':
+                return Color.CYAN;
+            case 'O':
+                return Color.ORANGE;
+            case '_':
+                return Color.GRAY;
+            default:
+                return Color.BLACK;
         }
     }
 

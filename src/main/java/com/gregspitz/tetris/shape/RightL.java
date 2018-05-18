@@ -16,7 +16,7 @@ public class RightL extends Shape {
      * @param startY starting y position for 1 block
      */
     public RightL(int startX, int startY) {
-        super(Color.CYAN);
+        super('C');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

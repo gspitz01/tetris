@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class Square extends Shape {
 
     /**
@@ -13,7 +11,7 @@ public class Square extends Shape {
      * @param startY top starting position of the Square
      */
     public Square(int startX, int startY) {
-        super(Color.RED);
+        super('R');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

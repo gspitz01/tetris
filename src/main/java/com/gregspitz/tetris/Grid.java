@@ -158,25 +158,6 @@ public class Grid {
         }
     }
 
-    private char getBlockChar(Block block) {
-        if (block.getColor().equals(Color.RED)) {
-            return 'R';
-        } else if (block.getColor().equals(Color.BLUE)) {
-            return 'B';
-        } else if (block.getColor().equals(Color.YELLOW)) {
-            return 'Y';
-        } else if (block.getColor().equals(Color.GREEN)) {
-            return 'G';
-        } else if (block.getColor().equals(Color.MAGENTA)) {
-            return 'M';
-        } else if (block.getColor().equals(Color.CYAN)) {
-            return 'C';
-        } else if (block.getColor().equals(Color.ORANGE)) {
-            return 'O';
-        }
-        return '?';
-    }
-
     public boolean isGameOver() {
         return gameOver;
     }
@@ -192,17 +173,15 @@ public class Grid {
         if (currentShape != null) {
             // Display blocks from currentShape
             for (Block block : currentShape.getBlocks()) {
-                char colorChar = getBlockChar(block);
                 // Y coord can be below 0, avoid trying to print those block
                 if (block.getY() >= 0) {
-                    grid[block.getX()][block.getY()] = colorChar;
+                    grid[block.getX()][block.getY()] = block.getColor();
                 }
             }
         }
         // Display blocks in the blockGroup
         for (Block block : blockGroup) {
-            char colorChar = getBlockChar(block);
-            grid[block.getX()][block.getY()] = colorChar;
+            grid[block.getX()][block.getY()] = block.getColor();
         }
         StringBuilder gridString = new StringBuilder();
         for (int j = 0; j < height; j++) {

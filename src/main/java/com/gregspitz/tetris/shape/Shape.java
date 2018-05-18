@@ -1,26 +1,20 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public abstract class Shape {
 
     public static final int NUM_BLOCKS = 4;
-    private Color color;
+    private char color;
     protected Block[] blocks;
 
     /**
      * All shape subclasses must call setBlocks in their constructors
      * @param color the shape's color - cannot be null
      */
-    public Shape(Color color) {
-        if (color == null) {
-            throw new IllegalArgumentException("Color cannot be null");
-        }
-
+    public Shape(char color) {
         this.color = color;
     }
 
-    public Color getColor() {
+    public char getColor() {
         return color;
     }
 

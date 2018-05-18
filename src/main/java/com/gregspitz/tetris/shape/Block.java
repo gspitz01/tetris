@@ -1,21 +1,19 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class Block {
 
     private int x;
     private int y;
-    private Color color;
+    private char color;
 
 
-    public Block(int x, int y, Color color) {
+    public Block(int x, int y, char color) {
         this.x = x;
         this.y = y;
         this.color = color;
     }
 
-    public Color getColor() {
+    public char getColor() {
         return color;
     }
 
@@ -41,7 +39,7 @@ public class Block {
         int result = 17;
         result = prime * result + x;
         result = prime * result + y;
-        return result + color.hashCode();
+        return result + color;
     }
 
     @Override
@@ -54,6 +52,6 @@ public class Block {
             return false;
         }
         Block otherBlock = (Block) obj;
-        return x == otherBlock.x && y == otherBlock.y && color.equals(otherBlock.color);
+        return x == otherBlock.x && y == otherBlock.y && color == otherBlock.color;
     }
 }

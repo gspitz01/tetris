@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class Straight extends Shape {
 
     private boolean vertical;
@@ -18,7 +16,7 @@ public class Straight extends Shape {
      * @param startY y of top block
      */
     public Straight(int startX, int startY) {
-        super(Color.BLUE);
+        super('B');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         for (int i = 0; i < NUM_BLOCKS; i++) {

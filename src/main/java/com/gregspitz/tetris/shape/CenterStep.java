@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class CenterStep extends Shape {
 
     /**
@@ -23,7 +21,7 @@ public class CenterStep extends Shape {
      * @param startY starting y position for #1 block
      */
     public CenterStep(int startX, int startY) {
-        super(Color.YELLOW);
+        super('Y');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

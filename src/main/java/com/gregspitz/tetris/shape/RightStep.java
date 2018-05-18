@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class RightStep extends Shape {
 
     private boolean horizontal;
@@ -12,11 +10,11 @@ public class RightStep extends Shape {
      * Initial block numbering:
      *   |3|4|
      * |1|2|
-     * @param startX
-     * @param startY
+     * @param startX starting x position of 1 block
+     * @param startY starting y position of 1 block
      */
     public RightStep(int startX, int startY) {
-        super(Color.GREEN);
+        super('G');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class LeftStep extends Shape {
 
     private boolean horizontal;
@@ -16,7 +14,7 @@ public class LeftStep extends Shape {
      * @param startY starting y position of #1 block
      */
     public LeftStep(int startX, int startY) {
-        super(Color.MAGENTA);
+        super('M');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;

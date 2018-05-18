@@ -1,7 +1,5 @@
 package com.gregspitz.tetris.shape;
 
-import java.awt.*;
-
 public class LeftL extends Shape {
 
     /**
@@ -23,7 +21,7 @@ public class LeftL extends Shape {
      * @param startY y position of 1 block
      */
     public LeftL(int startX, int startY) {
-        super(Color.ORANGE);
+        super('O');
         int[] xs = new int[NUM_BLOCKS];
         int[] ys = new int[NUM_BLOCKS];
         xs[0] = startX;
