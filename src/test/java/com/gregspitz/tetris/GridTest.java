@@ -53,6 +53,15 @@ public class GridTest {
     }
 
     @Test
+    public void gameOverAddShape_doesNothing() {
+        createGameOverWith5Straights();
+        assertEquals(GridTestData.GRID_WITH_5_STRAIGHTS_STACKED_AT_0_0, grid.toString());
+        Shape square = new Square(5, 0);
+        grid.addShape(square);
+        assertEquals(GridTestData.GRID_WITH_5_STRAIGHTS_STACKED_AT_0_0, grid.toString());
+    }
+
+    @Test
     public void addSquareWithinBounds_addsSquareAndReturnsTrue() {
         Shape square = new Square(0, 0);
         assertTrue(grid.addShape(square));
