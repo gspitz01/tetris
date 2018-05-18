@@ -11,7 +11,7 @@ import java.util.List;
 public class Grid {
 
     public static final int DEFAULT_WIDTH = 10;
-    public static final int DEFAULT_HEIGHT = 20;
+    static final int DEFAULT_HEIGHT = 20;
 
     private int width;
     private int height;
@@ -19,7 +19,7 @@ public class Grid {
     private List<Block> blockGroup;
     private boolean gameOver;
 
-    public Grid(int width, int height) {
+    Grid(int width, int height) {
         this.width = width;
         this.height = height;
         this.currentShape = null;
@@ -27,7 +27,7 @@ public class Grid {
         gameOver = false;
     }
 
-    public boolean addShape(Shape shape) {
+    boolean addShape(Shape shape) {
         if (gameOver || currentShape != null) {
             return false;
         }
@@ -47,7 +47,7 @@ public class Grid {
         return true;
     }
 
-    public void moveCurrentShapeDown() {
+    void moveCurrentShapeDown() {
         if (currentShape == null || gameOver) {
             return;
         }
@@ -75,7 +75,7 @@ public class Grid {
         return false;
     }
 
-    public void moveCurrentShapeLeft() {
+    void moveCurrentShapeLeft() {
         if (currentShape == null || gameOver) {
             return;
         }
@@ -98,7 +98,7 @@ public class Grid {
         }
     }
 
-    public void moveCurrentShapeRight() {
+    void moveCurrentShapeRight() {
         if (currentShape == null || gameOver) {
             return;
         }
@@ -121,7 +121,7 @@ public class Grid {
         }
     }
 
-    public void rotateCurrentShape() {
+    void rotateCurrentShape() {
         if (!gameOver && currentShape != null) {
             currentShape.rotate();
         }
@@ -140,6 +140,9 @@ public class Grid {
             blocksInRow[i] = 0;
         }
         for (Block block : blockGroup) {
+            if (block.getY() < 0) {
+                continue;
+            }
             blocksInRow[block.getY()]++;
         }
         List<Integer> rowsToRemove = new ArrayList<>();
@@ -158,7 +161,7 @@ public class Grid {
         }
     }
 
-    public boolean isGameOver() {
+    boolean isGameOver() {
         return gameOver;
     }
 

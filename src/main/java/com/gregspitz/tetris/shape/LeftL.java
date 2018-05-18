@@ -71,5 +71,6 @@ public class LeftL extends Shape {
                 direction = 0;
                 break;
         }
+        stayInBounds();
     }
 }

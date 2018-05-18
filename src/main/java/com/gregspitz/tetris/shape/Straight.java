@@ -63,5 +63,6 @@ public class Straight extends Shape {
             blocks[3].setY(blocksY + 2);
         }
         vertical = !vertical;
+        stayInBounds();
     }
 }

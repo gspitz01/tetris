@@ -1,10 +1,12 @@
 package com.gregspitz.tetris.shape;
 
+import com.gregspitz.tetris.Grid;
+
 public abstract class Shape {
 
-    public static final int NUM_BLOCKS = 4;
+    static final int NUM_BLOCKS = 4;
     private char color;
-    protected Block[] blocks;
+    Block[] blocks;
 
     /**
      * All shape subclasses must call setBlocks in their constructors
@@ -36,10 +38,29 @@ public abstract class Shape {
         }
     }
 
-    public void setBlocks(int[] xs, int[] ys) {
+    void setBlocks(int[] xs, int[] ys) {
         blocks = new Block[NUM_BLOCKS];
         for (int i = 0; i < NUM_BLOCKS; i++) {
             blocks[i] = new Block(xs[i], ys[i], color);
+        }
+    }
+
+    void stayInBounds() {
+        boolean moveRight = false;
+        boolean moveLeft = false;
+        for (Block block : getBlocks()) {
+            if (block.getX() < 0) {
+                moveRight = true;
+            } else if (block.getX() >= Grid.DEFAULT_WIDTH) {
+                moveLeft = true;
+            }
+        }
+        for (Block block : getBlocks()) {
+            if (moveRight) {
+                block.setX(block.getX() + 1);
+            } else if (moveLeft) {
+                block.setX(block.getX() - 1);
+            }
         }
     }
 

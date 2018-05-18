@@ -45,5 +45,6 @@ public class RightStep extends Shape {
             getBlocks()[3].setY(getBlocks()[3].getY() - 2);
         }
         horizontal = !horizontal;
+        stayInBounds();
     }
 }

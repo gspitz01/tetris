@@ -11,8 +11,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class GridTest {
-
-    // TODO: fix shape rotation so it doesn't leave boundary
     // TODO: give points for removal of row
     // TODO: fix bug of moving down and right or left causes overlap in shapes
     // -- moving over directly before a down motion causes overlapping corners
@@ -90,7 +88,7 @@ public class GridTest {
     }
 
     @Test
-    public void moveCurrentShape_movesShapeDownOneRow() {
+    public void moveCurrentShapeDown_movesShapeDownOneRow() {
         Shape square = new Square(0, 0);
         grid.addShape(square);
         grid.moveCurrentShapeDown();
@@ -170,6 +168,13 @@ public class GridTest {
     }
 
     @Test
+    public void nullShapeMoveLeft_doesNothing() {
+        assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
+        grid.moveCurrentShapeLeft();
+        assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
+    }
+
+    @Test
     public void shapeAtRightEdgeMoveRight_doesNothing() {
         Shape square = new Square(DEFAULT_WIDTH - 2, 0);
         grid.addShape(square);
@@ -185,6 +190,13 @@ public class GridTest {
         assertEquals(GridTestData.GRID_WITH_SQUARE_AT_0_0, grid.toString());
         grid.moveCurrentShapeRight();
         assertEquals(GridTestData.GRID_WITH_SQUARE_AT_1_0, grid.toString());
+    }
+
+    @Test
+    public void nullShapeMoveRight_doesNothing() {
+        assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
+        grid.moveCurrentShapeRight();
+        assertEquals(GridTestData.EMPTY_GRID_DEFAULT_SIZE_STRING, grid.toString());
     }
 
     @Test
@@ -340,6 +352,23 @@ public class GridTest {
     }
 
     @Test
+    public void rotateVerticalLeftStepAtRightEdge_staysWithinBounds() {
+        Shape leftStep = new LeftStep(0, 0);
+        grid.addShape(leftStep);
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_AT_0_0, grid.toString());
+        for (int i = 0; i < 10; i++) {
+            grid.moveCurrentShapeRight();
+        }
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_AT_7_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_ROTATED_AT_7_0, grid.toString());
+        grid.moveCurrentShapeRight();
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_ROTATED_AT_8_0, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_LEFT_STEP_8_0, grid.toString());
+    }
+
+    @Test
     public void rotateCenterStep_rotatesCenterStep() {
         Shape centerStep = new CenterStep(1, 1);
         grid.addShape(centerStep);
@@ -352,6 +381,21 @@ public class GridTest {
         assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_THRICE_AT_1_1, grid.toString());
         grid.rotateCurrentShape();
         assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_1_1, grid.toString());
+    }
+
+    @Test
+    public void rotateCenterStepVerticalStepToRightAtLeftEdge_staysWithinBounds() {
+        Shape centerStep = new CenterStep(0, 0);
+        grid.addShape(centerStep);
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_0_0, grid.toString());
+        grid.moveCurrentShapeDown();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_AT_0_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_AT_0_1, grid.toString());
+        grid.moveCurrentShapeLeft();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_AT_MINUS1_1, grid.toString());
+        grid.rotateCurrentShape();
+        assertEquals(GridTestData.GRID_WITH_CENTER_STEP_ROTATED_TWICE_AT_0_1, grid.toString());
     }
 
     private void addShapeAndMoveItAllTheWayDown(Shape shape) {

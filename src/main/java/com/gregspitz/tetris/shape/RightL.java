@@ -69,5 +69,6 @@ public class RightL extends Shape {
                 direction = 0;
                 break;
         }
+        stayInBounds();
     }
 }

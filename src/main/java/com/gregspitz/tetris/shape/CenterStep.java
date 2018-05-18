@@ -76,5 +76,6 @@ public class CenterStep extends Shape {
                 direction = 0;
                 break;
         }
+        stayInBounds();
     }
 }
