@@ -4,17 +4,13 @@ import com.gregspitz.tetris.shape.Block;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import static com.gregspitz.tetris.GameModel.SHAPE_START_X;
 import static com.gregspitz.tetris.GameModel.SHAPE_START_Y;
 
-public class Game extends JComponent implements ActionListener {
+public class Game extends JComponent {
 
     // TODO: separate some of this into other classes based on comments
-
-    private static final int TIMER_INTERVAL = 200;
     private static final int FRAME_WIDTH = 1000;
     private static final int FRAME_HEIGHT = 1200;
     private static final int GRID_WIDTH = 800;
@@ -34,7 +30,7 @@ public class Game extends JComponent implements ActionListener {
     private static final String GAME_OVER_TEXT = "GAME OVER";
     private static final String NEXT_SHAPE_TEXT = "Next Shape";
 
-    private Timer timer;
+    private GameTimer timer;
     private GameModel gameModel;
     private boolean gameOver;
 
@@ -42,7 +38,7 @@ public class Game extends JComponent implements ActionListener {
         gameModel = new GameModel();
         gameOver = false;
         // Timing
-        timer = new Timer(TIMER_INTERVAL, this);
+        timer = new GameTimer(gameModel, this);
 
         // View
         setSize(GRID_WIDTH, GRID_HEIGHT);
@@ -52,7 +48,6 @@ public class Game extends JComponent implements ActionListener {
         // View and events
         addKeyListener(new GameKeyListener(gameModel, this));
 
-        // Timing
         timer.start();
     }
 
@@ -153,20 +148,7 @@ public class Game extends JComponent implements ActionListener {
         gameFrame.setVisible(true);
     }
 
-    // Timing
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO: show animation for removal of row
-        // Returns true if game is over
-        if (gameModel.update()) {
-            // Timing
-            timer.stop();
-            gameOver = true;
-        }
-
-        // View
-        repaint();
+    void gameIsOver() {
+        gameOver = true;
     }
-
-
 }
