@@ -9,7 +9,7 @@
 - left step - purple
 - center step - yellow
 - left L - orange
-- right L - light blue
+- right L - light gray
 
 blocks fall from top of grid
 blocks stack on each other

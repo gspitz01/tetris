@@ -3,6 +3,8 @@ package com.gregspitz.tetris.shape;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -18,6 +20,11 @@ public class RightLTest {
     @Before
     public void setup() {
         rightL = new RightL(START_X, START_Y);
+    }
+
+    @Test
+    public void constructor_setsColorLightGray() {
+        assertEquals(Color.LIGHT_GRAY, rightL.getColor());
     }
 
     @Test
