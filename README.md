@@ -2,12 +2,14 @@
 [![codecov](https://codecov.io/gh/gspitz01/tetris/branch/master/graph/badge.svg)](https://codecov.io/gh/gspitz01/tetris)
 # Tetris
 
-5 different types of blocks:
+7 different types of blocks:
 - square - red
 - straight - blue
 - right step - green
 - left step - purple
 - center step - yellow
+- left L - orange
+- right L - light blue
 
 blocks fall from top of grid
 blocks stack on each other

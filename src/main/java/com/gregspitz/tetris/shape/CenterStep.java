@@ -35,6 +35,7 @@ public class CenterStep extends Shape {
         xs[3] = startX + 2;
         ys[3] = startY;
         setBlocks(xs, ys);
+        direction = 0;
     }
 
     @Override
