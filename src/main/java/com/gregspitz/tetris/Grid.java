@@ -6,7 +6,6 @@ import com.gregspitz.tetris.shape.Shape;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 public class Grid {
@@ -170,6 +169,10 @@ public class Grid {
             return 'G';
         } else if (block.getColor().equals(Color.MAGENTA)) {
             return 'M';
+        } else if (block.getColor().equals(Color.CYAN)) {
+            return 'C';
+        } else if (block.getColor().equals(Color.ORANGE)) {
+            return 'O';
         }
         return '?';
     }

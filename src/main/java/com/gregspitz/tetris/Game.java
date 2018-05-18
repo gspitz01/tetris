@@ -11,9 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-import static java.awt.event.KeyEvent.VK_LEFT;
-import static java.awt.event.KeyEvent.VK_RIGHT;
-import static java.awt.event.KeyEvent.VK_UP;
+import static java.awt.event.KeyEvent.*;
 
 public class Game extends JComponent implements ActionListener, KeyListener {
 
@@ -26,7 +24,7 @@ public class Game extends JComponent implements ActionListener, KeyListener {
     private static final int START_X = 20;
     private static final int START_Y = 20;
     private static final int SPACE_BETWEEN_BLOCKS = 1;
-    private static final int NUM_SHAPES = 5;
+    private static final int NUM_SHAPES = 7;
     private static final int SHAPE_START_X = 4;
     private static final int SHAPE_START_Y = -1;
     private static final int NEXT_SHAPE_VIEW_X = 50 + START_X + BLOCK_SIZE * 10;
@@ -87,6 +85,14 @@ public class Game extends JComponent implements ActionListener, KeyListener {
                     break;
                 case 'B':
                     color = Color.BLUE;
+                    drawBlock = true;
+                    break;
+                case 'C':
+                    color = Color.CYAN;
+                    drawBlock = true;
+                    break;
+                case 'O':
+                    color = Color.ORANGE;
                     drawBlock = true;
                     break;
                 case '_':
@@ -154,6 +160,10 @@ public class Game extends JComponent implements ActionListener, KeyListener {
                 return new LeftStep(SHAPE_START_X, SHAPE_START_Y);
             case 4:
                 return new RightStep(SHAPE_START_X, SHAPE_START_Y);
+            case 5:
+                return new LeftL(SHAPE_START_X, SHAPE_START_Y);
+            case 6:
+                return new RightL(SHAPE_START_X, SHAPE_START_Y);
             default:
                 return new Square(SHAPE_START_X, SHAPE_START_Y);
         }
