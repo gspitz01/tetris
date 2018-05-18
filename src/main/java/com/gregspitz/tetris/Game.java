@@ -1,21 +1,16 @@
 package com.gregspitz.tetris;
 
-import com.gregspitz.tetris.shape.*;
-import com.gregspitz.tetris.shape.Shape;
+import com.gregspitz.tetris.shape.Block;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Random;
 
 import static com.gregspitz.tetris.GameModel.SHAPE_START_X;
 import static com.gregspitz.tetris.GameModel.SHAPE_START_Y;
-import static java.awt.event.KeyEvent.*;
 
-public class Game extends JComponent implements ActionListener, KeyListener {
+public class Game extends JComponent implements ActionListener {
 
     // TODO: separate some of this into other classes based on comments
 
@@ -55,7 +50,7 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         requestFocus();
 
         // View and events
-        addKeyListener(this);
+        addKeyListener(new GameKeyListener(gameModel, this));
 
         // Timing
         timer.start();
@@ -173,40 +168,5 @@ public class Game extends JComponent implements ActionListener, KeyListener {
         repaint();
     }
 
-    // Events
-    @Override
-    public void keyTyped(KeyEvent e) {
 
-    }
-
-    // Events
-    @Override
-    public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case VK_UP:
-                // Model
-                gameModel.rotateShape();
-                // View
-                repaint();
-                break;
-            case VK_LEFT:
-                // Model
-                gameModel.moveShapeLeft();
-                // View
-                repaint();
-                break;
-            case VK_RIGHT:
-                // Model
-                gameModel.moveShapeRight();
-                // View
-                repaint();
-                break;
-        }
-    }
-
-    // Events
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 }
